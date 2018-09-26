@@ -16,19 +16,29 @@
 
 import * as express from "express-serve-static-core";
 import * as m from "mime";
+import * as http from "http";
+
+type HttpHandler = (
+    req: http.ServerRequest,
+    res: http.ServerResponse,
+    next: express.NextFunction
+) => any;
 
 /**
  * Create a new middleware function to serve files from within a given root directory.
  * The file to serve will be determined by combining req.url with the provided root directory.
  * When a file is not found, instead of sending a 404 response, this module will instead call next() to move on to the next middleware, allowing for stacking and fall-backs.
  */
-declare function serveStatic(root: string, options?: serveStatic.ServeStaticOptions): express.Handler;
+declare function serveStatic(
+    root: string,
+    options?: serveStatic.ServeStaticOptions
+): express.Handler | HttpHandler;
 
 declare namespace serveStatic {
     var mime: typeof m;
     interface ServeStaticOptions {
         /**
-         * Enable or disable setting Cache-Control response header, defaults to true. 
+         * Enable or disable setting Cache-Control response header, defaults to true.
          * Disabling this will ignore the immutable and maxAge options.
          */
         cacheControl?: boolean;
@@ -96,9 +106,12 @@ declare namespace serveStatic {
          * path the file path that is being sent
          * stat the stat object of the file that is being sent
          */
-        setHeaders?: (res: express.Response, path: string, stat: any) => any;
+        setHeaders?: (res: http.ServerResponse, path: string, stat: any) => any;
     }
-    function serveStatic(root: string, options?: ServeStaticOptions): express.Handler;
+    function serveStatic(
+        root: string,
+        options?: ServeStaticOptions
+    ): express.Handler | HttpHandler;
 }
 
 export = serveStatic;
