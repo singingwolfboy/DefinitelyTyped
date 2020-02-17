@@ -368,6 +368,13 @@ export interface GeolocateControlProps extends BaseControlProps {
 
 export class GeolocateControl extends BaseControl<GeolocateControlProps, HTMLDivElement> {}
 
+export interface ScaleControlProps extends BaseControlProps {
+    maxWidth?: number;
+    unit?: 'imperial' | 'metric' | 'nautical';
+}
+
+export class ScaleControl extends BaseControl<ScaleControlProps, HTMLDivElement> {}
+
 export interface DragEvent {
     lngLat: [number, number];
     [key: string]: any;
